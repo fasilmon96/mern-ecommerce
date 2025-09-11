@@ -75,7 +75,7 @@ export const login = async (req, res) => {
         role: user.role
       })
     } else {
-      res.status(401).json({ message: "Invalid email or password" })
+      res.status(400).json({ message: "Invalid email or password" })
     }
   } catch (error) {
     console.log("Error in login controller", error.message),
@@ -109,7 +109,7 @@ export const refreshToken = async (req, res) => {
     const storedToken = await redis.get(`refresh_token:${decoded.userId}`)
 
     if (storedToken !== refreshToken) {
-      return res.status(400).json({ message: "Ivalid refresh token" })
+      return res.status(401).json({ message: "Ivalid refresh token" })
     }
 
     const accessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
